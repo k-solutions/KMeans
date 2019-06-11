@@ -7,6 +7,8 @@ import           KMeansCore
 import           Control.Concurrent (runInUnboundThread)
 import           Data.Binary        (Binary (..), decodeFile)
 import           Data.Time.Clock    (diffUTCTime, getCurrentTime)
+import           Data.Vector        (Vector (..))
+import qualified Data.Vector        as V (fromList)
 import           System.Mem
 import           Text.Printf
 
@@ -15,9 +17,9 @@ import           Text.Printf
 -- - 2. Iterate over and assign centroids to datapoints
 -- - 3. Calculate new centroids for newly formed clusters
 
-mainIO :: (Binary b, Read a, Show a) => ((b, a) -> IO a) -> IO ()
+mainIO :: (Binary b, Read a, Show a) => ((Vector b, a) -> IO a) -> IO ()
 mainIO action = do
-  points    <- decodeFile "points.bin"
+  points    <- V.fromList <$> decodeFile "points.bin"
   clusters  <- read <$> readFile "clusters"
   timeIt $ action (points, clusters)
 

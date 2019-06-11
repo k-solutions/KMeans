@@ -4,6 +4,7 @@ import           Control.Concurrent (runInUnboundThread)
 import           KMeans
 import           ParKMeans
 import           System.Environment
+--- import qualified Data.Vector as V (fromList)
 
 main :: IO ()
 main = runInUnboundThread $ do

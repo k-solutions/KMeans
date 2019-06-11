@@ -51,14 +51,14 @@ loopKMeans nextStepFun clusters =
 -- ---- MaxSize ----
 maxSize = 30    -- max size is upper bound on which we exit our loop
 
-assign :: Int -> [Cluster] -> [Point] -> Vector PointSum
+assign :: Int -> [Cluster] -> Vector Point -> Vector PointSum
 assign nmbCls clusters points = V.create $ do
   vec <- MV.replicate nmbCls emptyPointSum
   let  addPoint p = do
         let cId = clId $ nearCluster p
         ps <- MV.read vec cId
         MV.write vec cId $! addToPointSum ps p
-  mapM_ addPoint points
+  V.mapM_ addPoint points
   return vec
   where
     nearCluster p = fst

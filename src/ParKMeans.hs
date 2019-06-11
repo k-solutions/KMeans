@@ -3,10 +3,10 @@ module ParKMeans
     , parKMeansIO
     ) where
 
-import           Control.Parallel.Strategies (parList, rseq, using)
+import           Control.Parallel.Strategies (parTraversable, rseq, using)
 import           Data.List                   (foldr1)
 import           Data.Vector                 (Vector (..))
-
+import qualified Data.Vector                 as V
 import           KMeansCore
 import           KMeansIO
 
@@ -16,23 +16,24 @@ parKMeansIO :: Int -> IO ()
 parKMeansIO n = mainIO
             $ uncurry (parKMeans n)
 
-parKMeans :: Int -> [Point] -> [Cluster] -> IO [Cluster]
+parKMeans :: Int -> Vector Point -> [Cluster] -> IO [Cluster]
 parKMeans nmbCks points clusters =
-    let pChunks   = chunks nmbCks points
+    let pChunks   = split nmbCks points
         nxtStepFn = parStep pChunks
     in loopKMeans nxtStepFn clusters
 
 -- ---- Helpers ----
 
-chunks :: Int -> [a] -> [[a]]
-chunks _ [] = []
-chunks n xs = as : chunks n bs
-  where (as, bs) = splitAt n xs
+chunks :: Int -> Vector a -> Vector (Vector a)
+chunks n xs
+  | V.null xs = V.empty
+  | otherwise = as `V.cons` chunks n bs
+  where (as, bs) = V.splitAt n xs
 
-split :: Int -> [a] -> [[a]]
-split n xs = chunks (length xs `quot` n) xs
+split :: Int -> Vector a -> Vector (Vector a)
+split n xs  = chunks (V.length xs `quot` n) xs
 
-parStep :: [[Point]] -> Int -> [Cluster] -> [Cluster]
+parStep :: Vector (Vector Point) -> Int -> [Cluster] -> [Cluster]
 parStep pointss nmbCls clusters = mkNewCluster
                                 $ foldr1 combine
-                                    (map (assign nmbCls clusters) pointss `using` parList rseq)
+                                    (V.map (assign nmbCls clusters) pointss `using` parTraversable rseq)
