@@ -30,7 +30,7 @@ version = Version [0,1,0,0] []
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
 
 bindir     = "/home/me/.cabal/bin"
-libdir     = "/home/me/.cabal/lib/x86_64-linux-ghc-8.6.5/kMeans-0.1.0.0-98LPlqZtlXh5D82NQKCVGW-kMeans-exe"
+libdir     = "/home/me/.cabal/lib/x86_64-linux-ghc-8.6.5/kMeans-0.1.0.0-DkH8aQg9wmZDpiKp6SjeBc-kMeans-exe"
 dynlibdir  = "/home/me/.cabal/lib/x86_64-linux-ghc-8.6.5"
 datadir    = "/home/me/.cabal/share/x86_64-linux-ghc-8.6.5/kMeans-0.1.0.0"
 libexecdir = "/home/me/.cabal/libexec/x86_64-linux-ghc-8.6.5/kMeans-0.1.0.0"

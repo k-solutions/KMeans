@@ -1,4 +1,4 @@
-module KMeans where
+module KMeans (runKMeans) where
 
 import           Data.Vector (Vector (..))
 import           KMeansCore
@@ -9,10 +9,10 @@ import           KMeansIO
 -- - 2. Iterate over and assign centroids to datapoints
 -- - 3. Calculate new centroids for newly formed clusters
 
-kmeansIO :: IO ()
-kmeansIO = mainIO $ uncurry kMeans
+runKMeans :: Config -> IO ()
+runKMeans = runApp (runAction . uncurry $ kMeans)
 
-kMeans :: Vector Point -> [Cluster] -> IO [Cluster]
+kMeans :: Vector Point -> [Cluster] -> App [Cluster]
 kMeans points = loopKMeans
               $ nextStep points
 nextStep :: Vector Point -> Int -> [Cluster] -> [Cluster]

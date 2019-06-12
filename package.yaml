@@ -33,6 +33,7 @@ dependencies:
 - random  
 - time
 - parallel
+- text
 
 library:
   source-dirs: src

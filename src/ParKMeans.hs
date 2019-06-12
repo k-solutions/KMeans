@@ -1,6 +1,6 @@
 module ParKMeans
     ( parKMeans
-    , parKMeansIO
+    , runParKMeans
     ) where
 
 import           Control.Parallel.Strategies (parTraversable, rseq, using)
@@ -12,11 +12,10 @@ import           KMeansIO
 
 ---- API ----
 
-parKMeansIO :: Int -> IO ()
-parKMeansIO n = mainIO
-            $ uncurry (parKMeans n)
+runParKMeans :: Int -> Config -> IO ()
+runParKMeans n = runApp (runAction . uncurry $ parKMeans n)
 
-parKMeans :: Int -> Vector Point -> [Cluster] -> IO [Cluster]
+parKMeans :: Int -> Vector Point -> [Cluster] -> App [Cluster]
 parKMeans nmbCks points clusters =
     let pChunks   = split nmbCks points
         nxtStepFn = parStep pChunks

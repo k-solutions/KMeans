@@ -5,7 +5,7 @@ let
   inherit (nixpkgs) pkgs;
 
   f = { mkDerivation, base, binary, bytestring, container, deepseq
-      , hpack, mtl, parallel, random, random-fu, rvar, stdenv, time
+      , hpack, mtl, parallel, random, random-fu, rvar, stdenv, text, time
       , transformers, vector
       }:
       mkDerivation {
@@ -16,16 +16,16 @@ let
         isExecutable = true;
         libraryHaskellDepends = [
           base binary bytestring container deepseq mtl parallel random
-          random-fu rvar time transformers vector
+          random-fu rvar text time transformers vector
         ];
         libraryToolDepends = [ hpack ];
         executableHaskellDepends = [
           base binary bytestring container deepseq mtl parallel random
-          random-fu rvar time transformers vector
+          random-fu rvar text time transformers vector
         ];
         testHaskellDepends = [
           base binary bytestring container deepseq mtl parallel random
-          random-fu rvar time transformers vector
+          random-fu rvar text time transformers vector
         ];
         preConfigure = "hpack";
         homepage = "https://github.com/githubuser/parBase#readme";

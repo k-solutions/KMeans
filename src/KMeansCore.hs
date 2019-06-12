@@ -2,68 +2,24 @@ module KMeansCore
   ( Point (..)
   , PointSum (..)
   , Cluster (..)
-  , loopKMeans
   , mkNewCluster
---  , addToPointSum
---  , sqDistance
   , emptyPointSum
-  , assign
   , combine
+  , sqDistance
+  , addToPointSum
   ) where
 
 import           Control.DeepSeq
 import           Data.Binary
 import qualified Data.ByteString.Char8 as BC
-import           Data.Function         (on)
-import           Data.List             (foldl', maximumBy)
+import           Data.List             (foldl')
 import           Data.Vector           (Vector (..))
 import qualified Data.Vector           as V
-import qualified Data.Vector.Mutable   as MV (read, replicate, write)
 
 ---- Algorithm steps
 --- 1. Init random k-means
 --- 2. Iterate over and assign centroids to datapoints
 --- 3. Calculate new centroids for newly formed clusters
-
--- | A function should take points and clusters and return new clusters
-type NextStep = Int -> [Cluster] -> [Cluster]
-
---  | Main loop for KMeans algorith
-loopKMeans :: NextStep -> [Cluster] -> IO [Cluster]
-loopKMeans nextStepFun clusters =
-  let
-    nmbCls = length clusters
-    loop :: Int -> [Cluster] -> IO [Cluster]
-    loop  n clusters | n > maxSize = do
-      putStrLn "we run out of numbers"
-      return clusters
-    loop n clusters = do
-      putStrLn $ "interation " ++ show n
-      putStr $ unlines $ map show clusters
-      let clusters' = nextStepFun nmbCls clusters  -- points
-      if clusters' == clusters
-        then return clusters
-        else loop (n + 1) clusters'
-  in loop 0 clusters
-
--- ---- Plain Helpers ----
-
--- ---- MaxSize ----
-maxSize = 30    -- max size is upper bound on which we exit our loop
-
-assign :: Int -> [Cluster] -> Vector Point -> Vector PointSum
-assign nmbCls clusters points = V.create $ do
-  vec <- MV.replicate nmbCls emptyPointSum
-  let  addPoint p = do
-        let cId = clId $ nearCluster p
-        ps <- MV.read vec cId
-        MV.write vec cId $! addToPointSum ps p
-  V.mapM_ addPoint points
-  return vec
-  where
-    nearCluster p = fst
-                  $ maximumBy (compare `on` snd)
-                  [(c, sqDistance p $ clCent c) | c <- clusters]
 
 -- -- POINTS -- --
 

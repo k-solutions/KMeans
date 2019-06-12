@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f6756b533fe39ae137197cbbde5794d4bd15d57d15f2e551a5f0869a0ab6ab36
+-- hash: bfee56626a3c429147af08a927212ccaf7f509e01313fcdece9887e387e69f37
 
 name:           kMeans
 version:        0.1.0.0
@@ -47,6 +47,7 @@ library
     , random
     , random-fu
     , rvar
+    , text
     , time
     , transformers
     , vector
@@ -71,6 +72,7 @@ executable kMeans-exe
     , random
     , random-fu
     , rvar
+    , text
     , time
     , transformers
     , vector
@@ -96,6 +98,7 @@ test-suite kMeans-test
     , random
     , random-fu
     , rvar
+    , text
     , time
     , transformers
     , vector
